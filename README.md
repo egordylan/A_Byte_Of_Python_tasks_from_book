@@ -1,1 +1,2 @@
-# A_Byte_Of_Python_tasks_from_book
+# Tasks from book "A Byte Of Python"
+# I learn python and try to solve different tasks from the book.
