@@ -2,53 +2,53 @@ import os, zipfile
 import time
 
 
-#  1. Файлы и каталоги, которые необходимо скопировать, собираются в список.
-#  Имя, содержащее пробелы, необходимо оборачивать в двойные кавычки.
+#  1. Files and directories to be copied are collected in a list.
+#  A name containing spaces must be wrapped in double quotes.
 source = ['D:\FreeCodeCamp\My Documents', 'D:\FreeCodeCamp\Code', 'D:\FreeCodeCamp\py4everyone', 'D:\FreeIT']
 
-#  2. Резервные копии должны храниться в основном каталоге резерва.
+#  2. Backups should be stored in the primary backup directory.
 target_dir = 'D:\FreeCodeCamp\Backup'
 
-#  3. Файлы помещаются в zip-архив.
-#  4. Текущая дата служит именем подкаталога в основном каталоге.
+#  3. Files will place in zip-archive.
+#  4. The current data serves as the name of a subdirectory in the main directory.
 today = target_dir + os.sep + time.strftime('%Y%m%d')
-#  Именем для zip-архива служит текущее время.
+
+#  For name of zip-archive serves current time.
 now = time.strftime('%H%M%S')
 
-#  Запрашиваем комментарий пользователя для имени файла
-comment = input('Введите комментарий --> ')
-if len(comment) == 0:  #  проверяем, введен ли комментарий
+#  Requesting user comment for file name.
+comment = input('Input comment --> ')
+if len(comment) == 0:  #  check if a comment has been entered
     target = today + os.sep + now + '.zip'
 else:
     target = today + os.sep + now + '_' + \
              comment.replace(' ', '_') + '.zip'
 
-#  Создаем каталог если его еще нет.
+#  Create a directory if it does not exist yet.
 if not os.path.exists(today):
     os.mkdir(today)
-    print('Каталог успешно создан', today)
+    print('Directory successfully created', today)
 
-print('Создание нового zip-файла %s...' % target)
-#  название папки + w запись в архив + метод сжатия
+print('Creating a new zip-file %s...' % target)
+#  name of a directory + w write to archive + compression method
 zip_File = zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED)
 
-#  Обход всего дерева директорий и сжатие файлов в каждой папке
+#  Traversing the entire directory tree and compressing files in each folder.
 archDirName = ''
 
 for sub_source in source:
     for dir, subdirs, files in os.walk(sub_source):
-        print('2', dir)
-        print('Добавление файлов из директории %s...' % dir)
-        #  Имя текущейдиректории в архиве
+        print('Adding files from a directory %s...' % dir)
+        #  Name of the current directory in the archive
         archDirName = ''.join(dir)
-        #  Добавить в архив текущую директорию
+        #  Add current directory to archive
         zip_File.write(dir, archDirName)
 
-        #  Добавление в архив файлов из текущей директории
+        #  Adding files from the current directory to the archive
         for file in files:
-            #  Имя текущего файла в архиве
+            #  Name of the current file in the archive
             archFileName = dir + '/' + file
             zip_File.write(os.path.join(dir, file), archFileName)
 
 zip_File.close()
-print('Резервная копия успешна создана в', target)
+print('The backup was successfully created in ', target)
